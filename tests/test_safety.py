@@ -3,6 +3,7 @@
 import os
 import re
 import stat
+import sys
 from pathlib import Path
 
 import pytest
@@ -39,13 +40,19 @@ def _source_files():
 
 @pytest.mark.parametrize("pattern", FORBIDDEN)
 def test_forbidden_endpoint_not_in_code(pattern):
-    hits = [str(p) for p in _source_files() if re.search(pattern, p.read_text(), re.IGNORECASE)]
+    hits = [
+        str(p)
+        for p in _source_files()
+        if re.search(pattern, p.read_text(encoding="utf-8"), re.IGNORECASE)
+    ]
     assert not hits, f"{pattern} found in {hits}"
 
 
 def test_nothing_prints_to_stdout():
     """stdout is the JSON-RPC stream; a stray print() breaks the protocol."""
-    hits = [str(p) for p in _source_files() if re.search(r"\bprint\(", p.read_text())]
+    hits = [
+        str(p) for p in _source_files() if re.search(r"\bprint\(", p.read_text(encoding="utf-8"))
+    ]
     assert not hits
 
 
@@ -60,7 +67,7 @@ def test_httpx_does_not_log_urls():
 
 
 def test_gitignore_keeps_secrets_out():
-    ignored = (ROOT / ".gitignore").read_text()
+    ignored = (ROOT / ".gitignore").read_text(encoding="utf-8")
     for entry in (".env", "*.secret.json"):
         assert entry in ignored
 
@@ -71,6 +78,7 @@ def test_login_from_env(monkeypatch):
     assert registry.load_login("fake") == {"email": "a@example.com", "password": "x"}
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="Windows has no POSIX file modes (chmod 600)")
 def test_login_file_must_be_private(tmp_path, monkeypatch):
     monkeypatch.setattr(registry, "CONFIG_DIR", tmp_path)
     path = tmp_path / "fake.json"
@@ -98,6 +106,7 @@ def test_login_from_keychain_beats_file(tmp_path, monkeypatch):
     assert registry.load_login("fake")["email"] == "env@example.com"  # env wins
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="Windows has no POSIX file modes (chmod 600)")
 def test_no_keychain_falls_back_to_file(tmp_path, monkeypatch):
     from keyring.errors import NoKeyringError
 

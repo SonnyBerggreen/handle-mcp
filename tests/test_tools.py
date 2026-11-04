@@ -178,14 +178,18 @@ def test_real_store_parsers_keep_the_offer_fields():
     """The nemlig and Bilka parsers go through Product too; this fails if one of them ever
     answers a plain dict. offers_page.json has a Skarp pris without a normal price."""
     page = json.loads(
-        (Path(__file__).parent / "fixtures" / "nemlig" / "offers_page.json").read_text()
+        (Path(__file__).parent / "fixtures" / "nemlig" / "offers_page.json").read_text(
+            encoding="utf-8"
+        )
     )
     items = next(b["products"] for b in page["pageContent"] if (b.get("header") or {}).get("title"))
     checked = [p for raw in items if (p := offer_product(raw, "Skarp pris"))]
     assert checked and all(hasattr(p, "offer_until") for p in checked)
     assert any(p.before_price is None for p in checked)  # null, not a guess
     hits = json.loads(
-        (Path(__file__).parent / "fixtures" / "bilkatogo" / "algolia_offers.json").read_text()
+        (Path(__file__).parent / "fixtures" / "bilkatogo" / "algolia_offers.json").read_text(
+            encoding="utf-8"
+        )
     )["hits"]
     bilka = [
         p for h in hits for sid in h.get("storeData") or {} if (p := BilkaStore()._product(h, sid))

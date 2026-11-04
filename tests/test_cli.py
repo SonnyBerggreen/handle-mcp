@@ -2,6 +2,7 @@
 
 import io
 import os
+import sys
 
 import pytest
 
@@ -94,6 +95,7 @@ def config_dir(monkeypatch, tmp_path):
     return tmp_path / "handle-mcp"
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="Windows has no POSIX file modes (chmod 600)")
 def test_login_from_env_writes_an_owner_only_file(config_dir, monkeypatch, capsys):
     monkeypatch.setenv("HANDLE_FAKE_EMAIL", "a@example.com")
     monkeypatch.setenv("HANDLE_FAKE_PASSWORD", "rigtig")
@@ -149,6 +151,7 @@ def test_logout_file_only_without_a_keychain(config_dir, monkeypatch, capsys):
     assert "slettet fra config-filen." in capsys.readouterr().err
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="Windows has no POSIX file modes (chmod 600)")
 def test_login_from_env_tightens_an_existing_wide_file(config_dir, monkeypatch):
     config_dir.mkdir()
     old = config_dir / "fake.json"
@@ -158,7 +161,9 @@ def test_login_from_env_tightens_an_existing_wide_file(config_dir, monkeypatch):
     monkeypatch.setenv("HANDLE_FAKE_PASSWORD", "rigtig")
     assert cli.run(["login", "fake", "--from-env"]) == 0
     assert old.stat().st_mode & 0o777 == 0o600
-    assert old.read_text() == '{"email": "a@example.com", "password": "rigtig"}'  # no old tail
+    assert (
+        old.read_text(encoding="utf-8") == '{"email": "a@example.com", "password": "rigtig"}'
+    )  # no old tail
 
 
 def test_login_from_env_warns_when_the_keychain_wins(config_dir, monkeypatch, capsys):

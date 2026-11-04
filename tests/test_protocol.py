@@ -33,7 +33,7 @@ async def test_tool_surface_matches_the_snapshot():
     if os.environ.get("HANDLE_UPDATE_SNAPSHOT") == "1":
         SNAPSHOT.write_text(json.dumps(tools, ensure_ascii=False, indent=1) + "\n")
         pytest.skip("snapshot written: check the diff")
-    assert tools == json.loads(SNAPSHOT.read_text()), (
+    assert tools == json.loads(SNAPSHOT.read_text(encoding="utf-8")), (
         "A tool's name, description, arguments or annotations changed. If on purpose: "
         "HANDLE_UPDATE_SNAPSHOT=1 uv run pytest tests/test_protocol.py"
     )

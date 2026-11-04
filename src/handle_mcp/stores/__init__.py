@@ -97,7 +97,7 @@ def config_set(store: str, email: str, password: str) -> Path:
     if hasattr(os, "fchmod"):  # an existing wider file: tighten before writing (not on Windows)
         os.fchmod(fd, stat.S_IRUSR | stat.S_IWUSR)
     os.ftruncate(fd, 0)
-    with os.fdopen(fd, "w") as f:
+    with os.fdopen(fd, "w", encoding="utf-8") as f:
         json.dump({"email": email, "password": password}, f)
     return path
 
@@ -144,7 +144,7 @@ def load_login(store: str) -> dict[str, str]:
         )
     if path.stat().st_mode & (stat.S_IRWXG | stat.S_IRWXO):
         raise StoreError(f"{path} kan læses af andre. Kør: chmod 600 {path}")
-    data = json.loads(path.read_text())
+    data = json.loads(path.read_text(encoding="utf-8"))
     if not data.get("email") or not data.get("password"):
         raise StoreError(f"{path} mangler 'email' eller 'password'.")
     return {"email": data["email"], "password": data["password"]}

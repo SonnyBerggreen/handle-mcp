@@ -754,13 +754,15 @@ BILKA_FIX = Path(__file__).parent / "fixtures" / "bilkatogo"
 
 def _nemlig(name):
     store = NemligStore(httpx.AsyncClient())
-    hits = json.loads((NEMLIG_FIX / f"{name}.json").read_text())["Products"]["Products"]
+    hits = json.loads((NEMLIG_FIX / f"{name}.json").read_text(encoding="utf-8"))["Products"][
+        "Products"
+    ]
     return [store._product(h) for h in hits]
 
 
 def _bilka(name):
     store = BilkaStore(httpx.AsyncClient())
-    hits = json.loads((BILKA_FIX / f"{name}.json").read_text())["hits"]
+    hits = json.loads((BILKA_FIX / f"{name}.json").read_text(encoding="utf-8"))["hits"]
     return [x for h in hits if (x := store._product(h, "1653"))]
 
 
