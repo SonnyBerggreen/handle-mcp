@@ -220,8 +220,8 @@ def mixed(words: list[str], product: Any) -> int:
     nor 'Rugbrød m. kerner' or 'Laks m. skind'. REMA 1000 writes a comma: 'HK. OKSEKØD, 35% GRØNT'."""
     name = get(product, "name") or ""
     parts = FLAVOUR_RE.split(name, maxsplit=1)
-    if len(parts) != 2:
-        parts = name.split(",", maxsplit=1)
+    if len(parts) != 2:  # ", " only: "Skummetmælk 0,1% øko." has a decimal comma, no blend
+        parts = name.split(", ", maxsplit=1)
     shares = BLEND_RE.findall(parts[1]) if len(parts) == 2 else []
     if not any(w.lower() not in NUTRIENTS for w in shares):
         return 0

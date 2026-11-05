@@ -160,3 +160,18 @@ def test_verdict_says_make_a_list_when_rema_is_cheapest():
     result = compare.verdict({"rema": cheap, "nemlig": dear})
     assert result["cheapest"] == "rema"
     assert "lav en indkøbsliste" in result["summary"]
+
+
+@pytest.mark.parametrize(
+    ("name", "blend"),
+    [
+        ("HK. OKSEKØD, 35% GRØNT", 1),  # REMA 1000 writes the blend after a comma
+        ("Skummetmælk 0,1% øko.", 0),  # a decimal comma is not a blend (live 2026-11-05)
+        ("HK. OKSEKØD 8-12%", 0),
+    ],
+)
+def test_blend_after_a_comma_but_not_a_decimal_comma(name, blend):
+    from handle_mcp.match import mixed
+
+    words = ["skummetmælk"] if "mælk" in name else ["hakket", "oksekød"]
+    assert mixed(words, {"name": name}) == blend
