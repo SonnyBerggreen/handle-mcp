@@ -10,3 +10,4 @@ A cart change is reversible and costs nothing. An order spends money and commits
 
 - The human approves and pays on the store's own website or app.
 - Anything beyond the cart needs a new ADR that replaces this one.
+- REMA 1000 and Aarstiderne have no cart at all: see [0003](0003-list-only-stores.md).

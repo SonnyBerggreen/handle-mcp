@@ -31,6 +31,14 @@ FORBIDDEN = [
     r"ClearBasket",  # nemlig: empties the whole cart
     r"CancelOrder",
     r"AddRecipeToBasket",  # nemlig: fills the cart without the human's yes
+    r"shoppinglists",  # REMA 1000: no shopping list, the human writes their own
+    r"shopping-lists",
+    r"BasketApi",  # Aarstiderne: the basket is the browser's own (docs/adr/0003)
+    r"BasketSurface",
+    r"UpdateShipmentDate",
+    r"AddMealbox",
+    r"LoginApi",  # Aarstiderne needs no login for prices
+    r"/basket/check-out",
 ]
 
 

@@ -1,0 +1,245 @@
+{
+ "data": [
+  {
+   "id": 108341,
+   "name": "HAKKEDE TOMATER",
+   "underline": "400 GR. / REMA 1000",
+   "department": {
+    "id": 80,
+    "name": "Kolonial",
+    "slug": "kolonial",
+    "products_last_modified_at": "2026-11-04T17:00:14+00:00"
+   },
+   "category": {
+    "id": 8060,
+    "name": "Konserves & survarer",
+    "slug": "konserves-survarer",
+    "is_hidden": false
+   },
+   "age_limit": null,
+   "barcodes": [
+    "5705830017857",
+    "7032060010074"
+   ],
+   "labels": [
+    {
+     "id": 2,
+     "name": "REMA1000",
+     "image": "https://static-assets.digital.rema1000.dk/product/labels/2-64.webp"
+    },
+    {
+     "id": 40,
+     "name": "Nøglehul",
+     "image": "https://static-assets.digital.rema1000.dk/product/labels/40-64.webp"
+    }
+   ],
+   "prices": [
+    {
+     "price": 6.37,
+     "price_over_max_quantity": null,
+     "max_quantity": null,
+     "is_advertised": false,
+     "is_campaign": false,
+     "starting_at": "2025-10-16T00:00:00+00:00",
+     "ending_at": "2099-12-31T00:00:00+00:00",
+     "deposit": null,
+     "compare_unit": "kg",
+     "compare_unit_price": 15.93,
+     "consumption_unit": null,
+     "consumption_quantity": null
+    }
+   ],
+   "surface_treatments": null,
+   "produce": null,
+   "temperature_zone": null,
+   "is_self_scale_item": false,
+   "is_weight_item": false,
+   "is_available_in_all_stores": true,
+   "is_batch_item": false,
+   "origin_country": null,
+   "wine_labels": []
+  },
+  {
+   "id": 110328,
+   "name": "HAKKEDE TOMATER",
+   "underline": "400 GR. / REMA 1000, ØKOLOGISKE",
+   "department": {
+    "id": 80,
+    "name": "Kolonial",
+    "slug": "kolonial",
+    "products_last_modified_at": "2026-11-04T17:00:14+00:00"
+   },
+   "category": {
+    "id": 8060,
+    "name": "Konserves & survarer",
+    "slug": "konserves-survarer",
+    "is_hidden": false
+   },
+   "age_limit": null,
+   "barcodes": [
+    "5705830005700",
+    "5705830017840"
+   ],
+   "labels": [
+    {
+     "id": 2,
+     "name": "REMA1000",
+     "image": "https://static-assets.digital.rema1000.dk/product/labels/2-64.webp"
+    },
+    {
+     "id": 5,
+     "name": "Økologi",
+     "image": "https://static-assets.digital.rema1000.dk/product/labels/5-64.webp"
+    },
+    {
+     "id": 40,
+     "name": "Nøglehul",
+     "image": "https://static-assets.digital.rema1000.dk/product/labels/40-64.webp"
+    }
+   ],
+   "prices": [
+    {
+     "price": 6.91,
+     "price_over_max_quantity": null,
+     "max_quantity": null,
+     "is_advertised": false,
+     "is_campaign": false,
+     "starting_at": "2025-10-02T00:00:00+00:00",
+     "ending_at": "2026-11-21T00:00:00+00:00",
+     "deposit": null,
+     "compare_unit": "kg",
+     "compare_unit_price": 17.28,
+     "consumption_unit": null,
+     "consumption_quantity": null
+    }
+   ],
+   "surface_treatments": null,
+   "produce": null,
+   "temperature_zone": null,
+   "is_self_scale_item": false,
+   "is_weight_item": false,
+   "is_available_in_all_stores": true,
+   "is_batch_item": false,
+   "origin_country": null,
+   "wine_labels": []
+  },
+  {
+   "id": 108332,
+   "name": "HAKKEDE TOMATER",
+   "underline": "400 GR. / REMA 1000 M/HVIDLØG",
+   "department": {
+    "id": 80,
+    "name": "Kolonial",
+    "slug": "kolonial",
+    "products_last_modified_at": "2026-11-04T17:00:14+00:00"
+   },
+   "category": {
+    "id": 8060,
+    "name": "Konserves & survarer",
+    "slug": "konserves-survarer",
+    "is_hidden": false
+   },
+   "age_limit": null,
+   "barcodes": [
+    "5705830000644",
+    "5705830017871"
+   ],
+   "labels": [
+    {
+     "id": 2,
+     "name": "REMA1000",
+     "image": "https://static-assets.digital.rema1000.dk/product/labels/2-64.webp"
+    },
+    {
+     "id": 40,
+     "name": "Nøglehul",
+     "image": "https://static-assets.digital.rema1000.dk/product/labels/40-64.webp"
+    }
+   ],
+   "prices": [
+    {
+     "price": 7.91,
+     "price_over_max_quantity": null,
+     "max_quantity": null,
+     "is_advertised": false,
+     "is_campaign": false,
+     "starting_at": "2025-10-02T00:00:00+00:00",
+     "ending_at": "2099-12-31T00:00:00+00:00",
+     "deposit": null,
+     "compare_unit": "kg",
+     "compare_unit_price": 19.78,
+     "consumption_unit": null,
+     "consumption_quantity": null
+    }
+   ],
+   "surface_treatments": null,
+   "produce": null,
+   "temperature_zone": null,
+   "is_self_scale_item": false,
+   "is_weight_item": false,
+   "is_available_in_all_stores": true,
+   "is_batch_item": false,
+   "origin_country": null,
+   "wine_labels": []
+  },
+  {
+   "id": 108334,
+   "name": "HAKKEDE TOMATER",
+   "underline": "400 GR. / REMA 1000 M/KRYDDERI",
+   "department": {
+    "id": 80,
+    "name": "Kolonial",
+    "slug": "kolonial",
+    "products_last_modified_at": "2026-11-04T17:00:14+00:00"
+   },
+   "category": {
+    "id": 8060,
+    "name": "Konserves & survarer",
+    "slug": "konserves-survarer",
+    "is_hidden": false
+   },
+   "age_limit": null,
+   "barcodes": [
+    "5705830000668",
+    "5705830017864"
+   ],
+   "labels": [
+    {
+     "id": 2,
+     "name": "REMA1000",
+     "image": "https://static-assets.digital.rema1000.dk/product/labels/2-64.webp"
+    },
+    {
+     "id": 40,
+     "name": "Nøglehul",
+     "image": "https://static-assets.digital.rema1000.dk/product/labels/40-64.webp"
+    }
+   ],
+   "prices": [
+    {
+     "price": 7.91,
+     "price_over_max_quantity": null,
+     "max_quantity": null,
+     "is_advertised": false,
+     "is_campaign": false,
+     "starting_at": "2025-10-02T00:00:00+00:00",
+     "ending_at": "2099-12-31T00:00:00+00:00",
+     "deposit": null,
+     "compare_unit": "kg",
+     "compare_unit_price": 19.78,
+     "consumption_unit": null,
+     "consumption_quantity": null
+    }
+   ],
+   "surface_treatments": null,
+   "produce": null,
+   "temperature_zone": null,
+   "is_self_scale_item": false,
+   "is_weight_item": false,
+   "is_available_in_all_stores": true,
+   "is_batch_item": false,
+   "origin_country": null,
+   "wine_labels": []
+  }
+ ]
+}

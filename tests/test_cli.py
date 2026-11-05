@@ -188,3 +188,14 @@ def test_login_from_env_survives_a_broken_keychain_entry(
     assert cli.run(["login", "fake", "--from-env"]) == 0
     assert (config_dir / "fake.json").exists()
     assert "nøgleringen har også et login" in capsys.readouterr().err
+
+
+def test_login_to_a_store_without_login_saves_nothing(monkeypatch, capsys):
+    class OpenStore:
+        needs_login = False
+
+    saved = []
+    monkeypatch.setattr(registry, "STORES", {"open": OpenStore})
+    monkeypatch.setattr(registry, "keychain_set", lambda *a: saved.append(a))
+    assert cli.run(["login", "open"]) == 0
+    assert saved == [] and "kræver intet login" in capsys.readouterr().err

@@ -120,7 +120,7 @@ async def search_products(
 async def search_recipes(query: str, stores: list[str] | None = None, limit: int = 5) -> dict:
     """Find the stores' own recipes, e.g. "kylling karry". Returns name and link.
     Use get_recipe for time, persons and the products to buy.
-    nemlig only for now; BilkaToGo answers that it cannot yet."""
+    nemlig and REMA 1000 (rema); the other stores answer that they cannot yet."""
     limit = max(1, min(limit, MAX_RESULTS))
     return _out(await _each(_names(stores), lambda s: s.recipes(query, limit)))
 
@@ -131,8 +131,8 @@ async def get_recipe(store: str, recipe: str, persons: int | None = None) -> dic
     per ingredient the store's product, packs for `persons` and alternatives. `have_at_home`
     items (salt, oil) are what the store assumes you have: left out of `total`, ask first.
     `recipe` is the recipe's link or id from search_recipes or list_recipes. Put the products
-    in the cart with add_recipe_to_cart after the human says yes.
-    nemlig only for now; BilkaToGo answers that it cannot yet."""
+    in the cart with add_recipe_to_cart after the human says yes (nemlig only).
+    nemlig and REMA 1000 (rema); the other stores answer that they cannot yet."""
     return _out(await _call(store, "recipe", recipe, _persons(persons)))
 
 
@@ -162,7 +162,8 @@ async def list_recipes(
 @mcp.tool(annotations=READ)
 async def list_offers(stores: list[str] | None = None, limit: int = 25) -> dict:
     """List this week's offers in each store, also items you would not search for: nemlig's
-    Skarp pris, Priskup, Dagstilbud, Undgå madspild and gifts; BilkaToGo's offers. `limit` is
+    Skarp pris, Priskup, Dagstilbud, Undgå madspild and gifts; BilkaToGo's and REMA 1000's
+    offers (REMA's "Avisvare"); Aarstiderne has no offers list. `limit` is
     per list; a product on two lists is shown once. A list the store fails to send is left out
     (see the server log). Free gifts come from a separate search and are not cut by `limit`.
     They have price 0 and "max_per_order". Use them when they fit the plan."""
@@ -179,7 +180,11 @@ async def compare_basket(items: list[str], stores: list[str] | None = None) -> d
     breaded), processed (frost/konserves), blend, oeko. The suggestion is a guess by word rules:
     pick the candidate that fits the user, and ask when "sure" is false or none fits
     (search_products finds more). Unknown facts and false flags are left out. Also total incl.
-    fees and minimum order met. Only reads: use set_cart_quantities with the chosen ids after."""
+    fees and minimum order met. A store with "list_only": true has no cart here: when it is
+    cheapest, write the human a shopping list (REMA 1000: to take to the store; Aarstiderne:
+    to put in the basket on aarstiderne.com). Aarstiderne prices are the member price, and
+    everything there is øko: compare øko with øko.
+    Only reads: use set_cart_quantities with the chosen ids after."""
     items = [i.strip() for i in items if i.strip()]
     if not items:
         raise ToolError("Indkøbslisten er tom.")
@@ -201,7 +206,9 @@ async def get_cart(store: str | None = None) -> dict:
 
 @mcp.tool(annotations=WRITE)
 async def set_cart_quantities(store: str, items: dict[str, int]) -> dict:
-    """Set ABSOLUTE quantities in one store's cart (0 removes the product). Never orders or pays. Returns a result per product and the new cart."""
+    """Set ABSOLUTE quantities in one store's cart (0 removes the product). Never orders or pays.
+    nemlig and BilkaToGo only: REMA 1000 and Aarstiderne have no cart here. Returns a result per product and
+    the new cart."""
     if not items:
         raise ToolError("Ingen varer angivet.")
     if len(items) > MAX_ITEMS:

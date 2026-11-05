@@ -150,10 +150,14 @@ def load_login(store: str) -> dict[str, str]:
     return {"email": data["email"], "password": data["password"]}
 
 
+from handle_mcp.stores.aarstiderne import AarstiderneStore
 from handle_mcp.stores.bilkatogo import BilkaStore
 from handle_mcp.stores.nemlig import NemligStore
+from handle_mcp.stores.rema import RemaStore
 
 STORES: dict[str, type[Store]] = {
     "nemlig": NemligStore,
     "bilkatogo": BilkaStore,
+    "rema": RemaStore,
+    "aarstiderne": AarstiderneStore,
 }

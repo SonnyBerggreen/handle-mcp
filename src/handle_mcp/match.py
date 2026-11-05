@@ -72,7 +72,7 @@ OEKO_RE = re.compile(r"\b(?:øko|økologiske?|organic)\b", re.IGNORECASE)  # not
 
 def get(product: Any, key: str) -> Any:
     """Adapters return Product; tolerate a dict too."""
-    return product.get(key) if isinstance(product, dict) else getattr(product, key)
+    return product.get(key) if isinstance(product, dict) else getattr(product, key, None)
 
 
 def parse_size(text: str | None) -> tuple[str, Decimal] | None:
@@ -93,6 +93,11 @@ def parse_item(item: str) -> tuple[int, list[str], tuple[str, Decimal] | None]:
     size = parse_size(item)
     words = [w for w in _words(SIZE_RE.sub(" ", item)) if w not in STOP_WORDS]
     return max(quantity, 1), words, size
+
+
+# Shop abbreviations: REMA 1000 writes "HK. OKSEKØD" for hakket oksekød.
+ABBREVIATIONS = {"hk": "hakket"}
+ABBREVIATION_RE = re.compile(r"\b(" + "|".join(ABBREVIATIONS) + r")\b\.?")
 
 
 def query(item: str) -> str:
@@ -119,6 +124,7 @@ def score(words: list[str], product: Any, asked: set[str] | frozenset[str] = fro
     words = [w.replace("c", "k") for w in words]
     asked = {w.replace("c", "k") for w in asked}
     name = (get(product, "name") or "").replace("C", "K").replace("c", "k").lower()
+    name = ABBREVIATION_RE.sub(lambda m: ABBREVIATIONS[m.group(1)], name)
     brand = (get(product, "brand") or "").replace("C", "K").replace("c", "k").lower()
     head = FLAVOUR_RE.split(name)[0]
     head_words = _words(head)
@@ -197,6 +203,8 @@ def processed(product: Any) -> str | None:
 
 
 def is_oeko(product: Any) -> bool:
+    if get(product, "oeko"):
+        return True
     return bool(OEKO_RE.search(f"{get(product, 'name')} {get(product, 'brand') or ''}"))
 
 
@@ -209,8 +217,11 @@ def _compound(word: str, token: str) -> bool:
 def mixed(words: list[str], product: Any) -> int:
     """1 for a blend the item does not ask for: 'Hakket oksekød m. 50% grønt'. A share of
     another food ('50% grønt') means a mix. A share of fat or sugar ('m. 0,5% fedt') does not,
-    nor 'Rugbrød m. kerner' or 'Laks m. skind'."""
-    parts = FLAVOUR_RE.split(get(product, "name") or "", maxsplit=1)
+    nor 'Rugbrød m. kerner' or 'Laks m. skind'. REMA 1000 writes a comma: 'HK. OKSEKØD, 35% GRØNT'."""
+    name = get(product, "name") or ""
+    parts = FLAVOUR_RE.split(name, maxsplit=1)
+    if len(parts) != 2:
+        parts = name.split(",", maxsplit=1)
     shares = BLEND_RE.findall(parts[1]) if len(parts) == 2 else []
     if not any(w.lower() not in NUTRIENTS for w in shares):
         return 0

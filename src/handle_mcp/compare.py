@@ -73,6 +73,7 @@ class BasketQuote:
     minimum_order: Decimal | None
     minimum_met: bool | None
     notes: list[str] = field(default_factory=list)
+    list_only: bool = False  # no cart in handle-mcp: the human shops from a list
 
 
 def best_match(item: str, products: list[Any], on: date | None = None) -> BasketLine:
@@ -225,7 +226,9 @@ async def quote(store: Any, items: list[str]) -> BasketQuote:
     products_total = sum((ln.line_total for ln in found), Decimal(0))
     fees = {k: v for k, v in {"levering": terms.delivery_fee, **terms.other_fees}.items() if v}
     notes = [note] if note else []
-    if not terms.home_delivery and not note:
+    if terms.note:
+        notes.append(terms.note)
+    elif not terms.home_delivery and not note:
         notes.append("Kurven er ikke sat til hjemlevering.")
     minimum = terms.minimum_order
     if minimum is not None and 0 < products_total < minimum:  # in words, for the human
@@ -240,6 +243,7 @@ async def quote(store: Any, items: list[str]) -> BasketQuote:
         minimum_order=minimum,
         minimum_met=None if minimum is None else products_total >= minimum,
         notes=notes,
+        list_only=terms.list_only,
     )
 
 
@@ -272,6 +276,8 @@ def verdict(quotes: dict[str, Any]) -> dict[str, Any]:
     cheapest = min(totals, key=lambda n: totals[n])
     summary = f"Billigst: {cheapest} ({totals[cheapest]} kr. inkl. gebyrer"
     summary += f" for de {len(common)} varer, alle butikker har)."
+    if ok[cheapest].list_only:
+        summary += f" {cheapest} har ingen kurv i handle-mcp: lav en indkøbsliste til den."
     if any(q.missing for q in ok.values()) or any(
         not ln.sure for q in ok.values() for ln in q.lines
     ):

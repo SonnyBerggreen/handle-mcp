@@ -31,7 +31,9 @@ async def test_tool_surface_matches_the_snapshot():
     for tool in tools:  # Python 3.13+ strips docstring indents itself; 3.12 does not
         tool["description"] = inspect.cleandoc(tool["description"])
     if os.environ.get("HANDLE_UPDATE_SNAPSHOT") == "1":
-        SNAPSHOT.write_text(json.dumps(tools, ensure_ascii=False, indent=1) + "\n")
+        SNAPSHOT.write_text(
+            json.dumps(tools, ensure_ascii=False, indent=1) + "\n", encoding="utf-8"
+        )
         pytest.skip("snapshot written: check the diff")
     assert tools == json.loads(SNAPSHOT.read_text(encoding="utf-8")), (
         "A tool's name, description, arguments or annotations changed. If on purpose: "

@@ -86,7 +86,7 @@
  },
  {
   "name": "compare_basket",
-  "description": "Price a shopping list in each store, e.g. [\"2 x letmælk 1 l\", \"rugbrød\", \"æg 10 stk\"].\nWrite the amount you need (\"fior di latte 300 g\"), not a pack size. Returns per item a\nsuggested product and up to 5 \"candidates\" (the suggestion first, one øko when found) with\nthe cost for the amount and flags: name_match, size_fits, prepared (cold cuts, smoked,\nbreaded), processed (frost/konserves), blend, oeko. The suggestion is a guess by word rules:\npick the candidate that fits the user, and ask when \"sure\" is false or none fits\n(search_products finds more). Unknown facts and false flags are left out. Also total incl.\nfees and minimum order met. Only reads: use set_cart_quantities with the chosen ids after.",
+  "description": "Price a shopping list in each store, e.g. [\"2 x letmælk 1 l\", \"rugbrød\", \"æg 10 stk\"].\nWrite the amount you need (\"fior di latte 300 g\"), not a pack size. Returns per item a\nsuggested product and up to 5 \"candidates\" (the suggestion first, one øko when found) with\nthe cost for the amount and flags: name_match, size_fits, prepared (cold cuts, smoked,\nbreaded), processed (frost/konserves), blend, oeko. The suggestion is a guess by word rules:\npick the candidate that fits the user, and ask when \"sure\" is false or none fits\n(search_products finds more). Unknown facts and false flags are left out. Also total incl.\nfees and minimum order met. A store with \"list_only\": true has no cart here: when it is\ncheapest, write the human a shopping list (REMA 1000: to take to the store; Aarstiderne:\nto put in the basket on aarstiderne.com). Aarstiderne prices are the member price, and\neverything there is øko: compare øko with øko.\nOnly reads: use set_cart_quantities with the chosen ids after.",
   "inputSchema": {
    "properties": {
     "items": {
@@ -229,7 +229,7 @@
  },
  {
   "name": "get_recipe",
-  "description": "The products to buy for one of the store's recipes, as on its \"Se varer og læg i kurv\":\nper ingredient the store's product, packs for `persons` and alternatives. `have_at_home`\nitems (salt, oil) are what the store assumes you have: left out of `total`, ask first.\n`recipe` is the recipe's link or id from search_recipes or list_recipes. Put the products\nin the cart with add_recipe_to_cart after the human says yes.\nnemlig only for now; BilkaToGo answers that it cannot yet.",
+  "description": "The products to buy for one of the store's recipes, as on its \"Se varer og læg i kurv\":\nper ingredient the store's product, packs for `persons` and alternatives. `have_at_home`\nitems (salt, oil) are what the store assumes you have: left out of `total`, ask first.\n`recipe` is the recipe's link or id from search_recipes or list_recipes. Put the products\nin the cart with add_recipe_to_cart after the human says yes (nemlig only).\nnemlig and REMA 1000 (rema); the other stores answer that they cannot yet.",
   "inputSchema": {
    "properties": {
     "store": {
@@ -303,7 +303,7 @@
  },
  {
   "name": "list_offers",
-  "description": "List this week's offers in each store, also items you would not search for: nemlig's\nSkarp pris, Priskup, Dagstilbud, Undgå madspild and gifts; BilkaToGo's offers. `limit` is\nper list; a product on two lists is shown once. A list the store fails to send is left out\n(see the server log). Free gifts come from a separate search and are not cut by `limit`.\nThey have price 0 and \"max_per_order\". Use them when they fit the plan.",
+  "description": "List this week's offers in each store, also items you would not search for: nemlig's\nSkarp pris, Priskup, Dagstilbud, Undgå madspild and gifts; BilkaToGo's and REMA 1000's\noffers (REMA's \"Avisvare\"); Aarstiderne has no offers list. `limit` is\nper list; a product on two lists is shown once. A list the store fails to send is left out\n(see the server log). Free gifts come from a separate search and are not cut by `limit`.\nThey have price 0 and \"max_per_order\". Use them when they fit the plan.",
   "inputSchema": {
    "properties": {
     "stores": {
@@ -452,7 +452,7 @@
  },
  {
   "name": "search_recipes",
-  "description": "Find the stores' own recipes, e.g. \"kylling karry\". Returns name and link.\nUse get_recipe for time, persons and the products to buy.\nnemlig only for now; BilkaToGo answers that it cannot yet.",
+  "description": "Find the stores' own recipes, e.g. \"kylling karry\". Returns name and link.\nUse get_recipe for time, persons and the products to buy.\nnemlig and REMA 1000 (rema); the other stores answer that they cannot yet.",
   "inputSchema": {
    "properties": {
     "query": {
@@ -494,7 +494,7 @@
  },
  {
   "name": "set_cart_quantities",
-  "description": "Set ABSOLUTE quantities in one store's cart (0 removes the product). Never orders or pays. Returns a result per product and the new cart.",
+  "description": "Set ABSOLUTE quantities in one store's cart (0 removes the product). Never orders or pays.\nnemlig and BilkaToGo only: REMA 1000 and Aarstiderne have no cart here. Returns a result per product and\nthe new cart.",
   "inputSchema": {
    "properties": {
     "store": {

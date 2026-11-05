@@ -38,9 +38,11 @@ async def test_cheapest_first(store):
 
 
 async def test_cart_terms_delivery(store):
+    terms = await store.terms()
+    if terms.list_only:
+        pytest.skip(f"{store.name} has no cart: the human shops from a list")
     cart = await store.get_cart()
     assert cart.total >= 0
-    terms = await store.terms()
     info = await store.delivery_info()
     # Printed so a human can check the facts (no personal data in these fields).
     print(f"\n[{store.name}] hjemlevering={terms.home_delivery} gebyrer={cart.fees}")
@@ -54,7 +56,10 @@ async def test_cart_terms_delivery(store):
 
 async def test_delivery_slots(store):
     """GET only: lists slots, never chooses one. Printed for a human check of the prices."""
-    slots = [s for s in await store.delivery_slots(days=3) if s.available]
+    try:
+        slots = [s for s in await store.delivery_slots(days=3) if s.available]
+    except NotImplementedError:
+        pytest.skip(f"{store.name} lists no delivery slots")
     assert slots and all(s.end > s.start for s in slots)
     for s in sorted(slots, key=lambda s: s.start)[:12]:
         print(f"\n[{store.name}] {s.start:%a %d/%m %H}-{s.end:%H} {s.kind or ''} {s.price} kr")
@@ -63,7 +68,10 @@ async def test_delivery_slots(store):
 async def test_offers(store):
     """Read only. A list can be empty on a given day (offers() leaves it out), so nemlig only
     needs one of its big weekly lists."""
-    offers = await store.offers(10)
+    try:
+        offers = await store.offers(10)
+    except NotImplementedError:
+        pytest.skip(f"{store.name} has no offers list")
     lists = {p.campaign for p in offers}
     print(f"\n[{store.name}] {len(offers)} tilbud, lister: {sorted(map(str, lists))}")
     assert offers and all(p.on_offer and p.id and p.name for p in offers)
@@ -120,7 +128,10 @@ async def test_nemlig_recipes_by_tag():
 
 
 async def test_orders(store):
-    orders = await store.orders(limit=2)
+    try:
+        orders = await store.orders(limit=2)
+    except NotImplementedError:
+        pytest.skip(f"{store.name} has no order history")
     if orders:
         await store.order(orders[0].id)
 

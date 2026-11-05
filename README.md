@@ -15,6 +15,8 @@
 
 Danish grocery stores with home delivery, as an MCP server: [nemlig.com](https://www.nemlig.com) and [BilkaToGo](https://www.bilkatogo.dk).
 
+This fork adds two stores for prices only, with no cart ([why](docs/adr/0003-list-only-stores.md)): [REMA 1000](https://shop.rema1000.dk) (prices, offers, recipes; you shop in the store from a list) and [Aarstiderne](https://www.aarstiderne.com) (member price, all øko; you put the list in the basket yourself). Neither needs a login.
+
 **It can never order or pay. You do.** That code does not exist, and a test fails if it shows up ([why](docs/adr/0001-the-human-always-pays.md)).
 
 ## How it works

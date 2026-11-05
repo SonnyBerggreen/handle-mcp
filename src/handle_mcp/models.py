@@ -26,6 +26,7 @@ class Product:
     category: str | None = None  # the store's category path, e.g. "Frugt & grønt > Bananer"
     campaign: str | None = None  # the store's offer list, e.g. "Priskup", "Skarp pris", "Gratis"
     max_per_order: int | None = None  # offer limit, e.g. 1 for a free gift
+    oeko: bool = False  # organic by the store's own label, also when the name does not say it
 
 
 @dataclass
@@ -113,6 +114,8 @@ class StoreTerms:
     other_fees: dict[str, Decimal] = field(default_factory=dict)
     minimum_order: Decimal | None = None
     source: str = "api"  # "api" or "config"
+    list_only: bool = False  # no cart in handle-mcp: the human shops from a list
+    note: str | None = None  # the store's own terms in Danish, e.g. what the in-store price means
 
 
 @dataclass

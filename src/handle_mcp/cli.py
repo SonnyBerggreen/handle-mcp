@@ -36,6 +36,9 @@ def run(args: list[str]) -> int:
         )
         return 2
     command, store = args
+    if command == "login" and not getattr(registry.STORES[store], "needs_login", True):
+        _say(f"{store} kræver intet login.")
+        return 0
     if command == "logout":
         return _logout(store)
     if from_env:
